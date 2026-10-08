@@ -1,0 +1,376 @@
+/* ==========================================================================
+   Design tokens – values required by the assignment are marked "spec".
+   ========================================================================== */
+:root {
+  --color-page-bg: #F5F5F5;   /* spec */
+  --color-white: #FFFFFF;     /* spec – button background */
+  --color-reply: #00325A;     /* spec – Reply button text */
+  --color-add: #DE5050;       /* spec – Add Comment button text */
+  --color-warning: #FF8300;   /* spec – inappropriate word message */
+  --color-text: #1F1F1F;
+  --color-muted: #5C5C5C;
+  --color-border: #D6D6D6;
+
+  --font-family: 'Lucida Handwriting', 'Lucida Calligraphy', cursive; /* spec */
+  --font-size: 18px;                                                  /* spec */
+
+  --space-xs: 0.25rem;
+  --space-s: 0.5rem;
+  --space-m: 1rem;
+  --space-l: 2rem;
+  --radius: 8px;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/* Width and height include padding and border – easier to size elements. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 1rem = 18px everywhere on the page (spec). */
+html {
+  font-size: var(--font-size);
+}
+
+/* Page background, font family and size (spec). */
+body {
+  margin: 0;
+  background-color: var(--color-page-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Headings keep the required 18px; hierarchy comes from weight and spacing. */
+h1,
+h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Spacing is controlled by layout classes instead of default margins. */
+p {
+  margin: 0;
+}
+
+/* Form controls do not inherit font settings by default. */
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* Elements hidden by JavaScript stay hidden even if a class sets `display`. */
+[hidden] {
+  display: none !important;
+}
+
+/* Hidden on screen, but still read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Layout – 70 % wide and centred, leaving 15 % on each side (spec)
+   ========================================================================== */
+.page {
+  width: 70%;
+  margin-inline: auto;
+  padding-block: var(--space-l);
+}
+
+/* Muted secondary text (subtitle, hints, empty state). */
+.page-subtitle,
+.hint {
+  color: var(--color-muted);
+}
+
+/* "Comments" heading with a dividing line. */
+.section-title {
+  margin-bottom: var(--space-m);
+  padding-bottom: var(--space-s);
+  border-bottom: 2px solid var(--color-border);
+}
+
+/* ==========================================================================
+   Header and account
+   ========================================================================== */
+
+/* Title on the left, account (login / logout) in the top right corner. */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-m) var(--space-l);
+  margin-bottom: var(--space-l);
+}
+
+/* Page title in the brand colour. */
+.page-title {
+  color: var(--color-reply);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Login / logout box; `margin-left: auto` keeps it on the right even when the header wraps. */
+.account {
+  margin-left: auto;
+  padding: var(--space-s) var(--space-m);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+/* Username, password and buttons in one row. */
+.auth-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-m);
+}
+
+/* Compact inputs, so the login box fits in the corner. */
+.auth-form .field__input {
+  width: 10em;
+}
+
+/* Takes the full row but does not make the login box wider when the message is long. */
+.auth-form .message {
+  flex-basis: 100%;
+  width: 0;
+  min-width: 100%;
+}
+
+/* "Logged in as …" and the Log out button side by side. */
+.user-panel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/* Label text above its input. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* Text inputs and the comment textarea. */
+.field__input {
+  padding: var(--space-s) var(--space-m);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+/* Clear focus ring for keyboard users. */
+.field__input:focus-visible {
+  outline: 3px solid var(--color-reply);
+  outline-offset: 1px;
+}
+
+/* Button rows. */
+.auth-form__actions,
+.comment-form__actions {
+  display: flex;
+  gap: var(--space-s);
+}
+
+/* "Log in to add comments…" shown to guests. */
+.guest-hint {
+  margin-bottom: var(--space-m);
+}
+
+/* Textarea, buttons and message stacked vertically. */
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  margin-bottom: var(--space-l);
+}
+
+/* Full-width textarea that can only be resized in height. */
+.comment-form__text {
+  width: 100%;
+  resize: vertical;
+}
+
+/* Message telling the user that a word is not allowed (spec). */
+.message {
+  color: var(--color-warning);
+}
+
+/* An empty message takes no space. */
+.message:empty {
+  display: none;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+/* Base button: Log in, Register, Log out, Cancel. */
+.button {
+  padding: var(--space-xs) var(--space-m);
+  background-color: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.button:hover:not(:disabled),
+.button:focus-visible {
+  border-color: var(--color-text);
+}
+
+/* While a comment is being checked. */
+.button:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+/* Reply and Add Comment: white background, coloured text; hover swaps them (spec).
+   Each button only sets its colour, the rules below are shared. */
+.button--reply {
+  --button-color: var(--color-reply);
+}
+
+.button--add {
+  --button-color: var(--color-add);
+}
+
+.button--reply,
+.button--add {
+  background-color: var(--color-white);
+  border-color: var(--button-color);
+  color: var(--button-color);
+}
+
+/* Opposite colours on hover – and on keyboard focus, for keyboard users. */
+.button--reply:hover:not(:disabled),
+.button--reply:focus-visible,
+.button--add:hover:not(:disabled),
+.button--add:focus-visible {
+  background-color: var(--button-color);
+  border-color: var(--button-color);
+  color: var(--color-white);
+}
+
+/* Visible focus ring for keyboard users. */
+.button:focus-visible {
+  outline: 3px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Comment tree
+   ========================================================================== */
+
+/* Lists without bullets. */
+.comment-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A comment without replies does not show an empty nested list. */
+.comment-list:empty {
+  display: none;
+}
+
+/* Replies are indented with a line that shows which comment they belong to. */
+.comment-list--nested {
+  margin-left: var(--space-l);
+  padding-left: var(--space-m);
+  border-left: 2px solid var(--color-border);
+}
+
+/* Space between comments. */
+.comment {
+  margin-top: var(--space-m);
+}
+
+/* White card with the content of one comment. */
+.comment__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-s);
+  padding: var(--space-m);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+/* Author and timestamp in one line. */
+.comment__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+}
+
+.comment__author {
+  font-weight: bold;
+  color: var(--color-reply);
+}
+
+.comment__time {
+  color: var(--color-muted);
+}
+
+/* Keeps the user's line breaks; long words wrap instead of overflowing. */
+.comment__text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The reply form uses the full card width. */
+.comment__reply-slot {
+  width: 100%;
+}
+
+.comment__reply-slot .comment-form {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Easter egg – doves released by iLovePeace()
+   ========================================================================== */
+
+/* Fixed to the window, starts below the bottom edge, cannot be clicked. */
+.peace-dove {
+  position: fixed;
+  bottom: -2rem;
+  z-index: 10;
+  pointer-events: none;
+  animation: fly-away 4s ease-in forwards;
+}
+
+/* Flies up out of the window with a small random sideways drift. */
+@keyframes fly-away {
+  to {
+    transform: translate(var(--drift, 0), -110vh) scale(2);
+    opacity: 0;
+  }
+}

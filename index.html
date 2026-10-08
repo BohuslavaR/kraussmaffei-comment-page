@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A threaded comments page with client-side login and Web Worker based moderation.">
+  <title>KraussMaffei – Comment Page</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- ES module: loaded after the HTML is parsed, so all elements below already exist -->
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <!-- Content area: 70 % of the width, centred (see .page in styles.css) -->
+  <div class="page">
+
+    <!-- Header: title on the left, account (login / logout) in the top right corner -->
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">KraussMaffei Comment Page</h1>
+        <p class="page-subtitle">A simple threaded comments page</p>
+      </div>
+
+      <section class="account" aria-labelledby="account-heading">
+        <h2 id="account-heading" class="visually-hidden">Account</h2>
+
+        <!-- Guest view: one form for both actions, the clicked button decides (event.submitter) -->
+        <form id="auth-form" class="auth-form" novalidate>
+          <label class="field">
+            Username
+            <input class="field__input" name="username" autocomplete="username" maxlength="20" required>
+          </label>
+          <label class="field">
+            Password
+            <input class="field__input" type="password" name="password" autocomplete="current-password" required>
+          </label>
+          <div class="auth-form__actions">
+            <button type="submit" class="button" value="login">Log in</button>
+            <button type="submit" class="button" value="register">Register</button>
+          </div>
+          <p class="message" role="alert" data-message></p>
+        </form>
+
+        <!-- Logged in view -->
+        <div id="user-panel" class="user-panel" hidden>
+          <p>Logged in as <strong id="current-username"></strong></p>
+          <button type="button" id="logout-button" class="button">Log out</button>
+        </div>
+      </section>
+    </header>
+
+    <!-- Comments: form for a new comment (logged in users only) and the comment tree -->
+    <main aria-labelledby="comments-heading">
+      <h2 id="comments-heading" class="section-title">Comments</h2>
+      <p id="guest-hint" class="hint guest-hint">Log in to add comments. Guests can only read them.</p>
+      <div id="new-comment-slot"></div>
+      <p id="empty-state" class="hint">No comments yet.</p>
+      <ul id="comment-list" class="comment-list"></ul>
+    </main>
+  </div>
+
+  <!-- Templates: not rendered, JavaScript clones them for every comment / form -->
+
+  <!-- One comment; its replies go into the nested list -->
+  <template id="comment-template">
+    <li class="comment">
+      <article class="comment__card">
+        <header class="comment__meta">
+          <span class="comment__author"></span>
+          <time class="comment__time"></time>
+        </header>
+        <p class="comment__text"></p>
+        <button type="button" class="button button--reply" aria-expanded="false">Reply</button>
+        <div class="comment__reply-slot"></div>
+      </article>
+      <ul class="comment-list comment-list--nested"></ul>
+    </li>
+  </template>
+
+  <!-- Comment form, used for new comments and for replies (only replies show "Cancel") -->
+  <template id="comment-form-template">
+    <form class="comment-form" novalidate>
+      <textarea class="field__input comment-form__text" name="text" rows="3" maxlength="1000"
+                placeholder="Write a comment…" aria-label="Comment text" required></textarea>
+      <div class="comment-form__actions">
+        <button type="submit" class="button button--add">Add Comment</button>
+        <button type="button" class="button" data-action="cancel" hidden>Cancel</button>
+      </div>
+      <p class="message" role="alert" data-message></p>
+    </form>
+  </template>
+</body>
+</html>

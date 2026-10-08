@@ -1,0 +1,12 @@
+# Files that should never be committed
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Dependencies (the project has none, but just in case)
+node_modules/
+
+# Editor settings
+.vscode/
+.idea/
